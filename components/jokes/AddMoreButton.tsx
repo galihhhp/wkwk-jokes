@@ -1,30 +1,45 @@
 import React from "react";
-import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 interface AddMoreButtonProps {
   onPress: () => void;
   isLimitReached: boolean;
+  loading?: boolean;
   color?: string;
 }
 
 const AddMoreButton = ({
   onPress,
   isLimitReached,
+  loading = false,
   color = "#5c6bc0",
 }: AddMoreButtonProps) => (
   <View style={styles.footerContainer}>
     {!isLimitReached ? (
       <TouchableOpacity
         style={[styles.addButton, { backgroundColor: color }]}
-        onPress={onPress}>
-        <Ionicons
-          name="add-circle-outline"
-          size={18}
-          color="#fff"
-          style={styles.buttonIcon}
-        />
-        <Text style={styles.buttonText}>Add more jokes</Text>
+        onPress={onPress}
+        disabled={loading}>
+        {loading ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <>
+            <Ionicons
+              name="add-circle-outline"
+              size={18}
+              color="#fff"
+              style={styles.buttonIcon}
+            />
+            <Text style={styles.buttonText}>Add more jokes</Text>
+          </>
+        )}
       </TouchableOpacity>
     ) : (
       <View style={styles.limitContainer}>

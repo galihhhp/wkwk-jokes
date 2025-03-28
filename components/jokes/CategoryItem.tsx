@@ -27,11 +27,14 @@ const CategoryItem = ({
   onMoveToTop,
   onAddMoreJokes,
   isLimitReached,
+  loadingJokes,
   color = "#5c6bc0",
-}: CategoryItemProps) => {
+}: CategoryItemProps & { loadingJokes: string | null }) => {
   const renderJokeItem = ({ item: joke }: { item: Joke }) => (
     <JokeItem joke={joke} color={color} />
   );
+
+  const categoryKey = `${item.name}-${index}`;
 
   return (
     <View style={styles.categoryContainer}>
@@ -67,6 +70,7 @@ const CategoryItem = ({
             <AddMoreButton
               onPress={onAddMoreJokes}
               isLimitReached={isLimitReached}
+              loading={loadingJokes === categoryKey}
               color={color}
             />
           )}

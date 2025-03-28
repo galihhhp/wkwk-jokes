@@ -35,6 +35,7 @@ const JokeScreen = () => {
     loadCategoriesAndJokes,
     addMoreJokes,
     moveToTop,
+    loadingJokes,
   } = useJokeCategories();
 
   const {
@@ -100,6 +101,7 @@ const JokeScreen = () => {
         }}
         onAddMoreJokes={() => handleAddMore(index)}
         isLimitReached={isLimitReached(categoryKey)}
+        loadingJokes={loadingJokes}
         color={PRIMARY_COLOR}
       />
     );

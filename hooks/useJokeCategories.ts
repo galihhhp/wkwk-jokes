@@ -6,6 +6,7 @@ export const useJokeCategories = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [loadingJokes, setLoadingJokes] = useState<string | null>(null);
 
   const loadCategoriesAndJokes = async () => {
     try {
@@ -28,17 +29,24 @@ export const useJokeCategories = () => {
   };
 
   const addMoreJokes = async (categoryIndex: number) => {
-    const updatedCategories = [...categories];
-    const category = updatedCategories[categoryIndex];
+    const categoryKey = `${categories[categoryIndex].name}-${categoryIndex}`;
+    setLoadingJokes(categoryKey);
 
-    const newJokes = await fetchJokesForCategory(category.name);
-    updatedCategories[categoryIndex] = {
-      ...category,
-      jokes: [...category.jokes, ...newJokes],
-    };
+    try {
+      const updatedCategories = [...categories];
+      const category = updatedCategories[categoryIndex];
 
-    setCategories(updatedCategories);
-    return `${category.name}-${categoryIndex}`;
+      const newJokes = await fetchJokesForCategory(category.name);
+      updatedCategories[categoryIndex] = {
+        ...category,
+        jokes: [...category.jokes, ...newJokes],
+      };
+
+      setCategories(updatedCategories);
+      return categoryKey;
+    } finally {
+      setLoadingJokes(null);
+    }
   };
 
   const moveToTop = (index: number) => {
@@ -63,5 +71,6 @@ export const useJokeCategories = () => {
     loadCategoriesAndJokes,
     addMoreJokes,
     moveToTop,
+    loadingJokes,
   };
 };
